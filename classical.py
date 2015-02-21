@@ -1,6 +1,7 @@
 import urllib
 import urllib2
 import re
+import xbmc
 from BeautifulSoup import BeautifulSoup
 
 #class ClassicalMusic:
@@ -12,7 +13,7 @@ class OneClassical:
 	
 	def get_composer_list(self):	
 		url = 'http://www.1classical.com/download_free_classical_music_MP3_browse_by_composer.php'
-		response = urllib2.urlopen(url)
+		response = urllib2.urlopen(url.replace(" ", "%20"))
 		html = response.read()
 		response.close()
 		soup = BeautifulSoup(html);
@@ -30,5 +31,18 @@ class OneClassical:
 	
 	def url_is_list_opere(self, url):
 		return url.find(self.LIST_OPERE)>=0
+	
+	def get_page_list(self, path):
+		url = "http://www.1classical.com/"+path
+		xbmc.log(url, level=xbmc.LOGNOTICE)
+		response = urllib2.urlopen(url.replace(" ", "%20"))
+		html = response.read()
+		response.close()
+		soup = BeautifulSoup(html);
+		lista_autori = soup.table.findAll('a')
+		list=[]
+		for link in lista_autori:
+			list.append([link.find(text=True), link.get("href")])
+		return list
 	
 	
