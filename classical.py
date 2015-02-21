@@ -45,6 +45,12 @@ class OneClassical:
 			list.append([link.find(text=True), link.get("href")])
 		return list
 	
+	def is_in_list(self, list, link):
+		for l in list:
+			if l[1] == link:
+				return True
+		return False
+	
 	def get_music_list(self, path):
 		url = urllib.unquote_plus("http://www.1classical.com/"+path)
 		print url
@@ -56,6 +62,11 @@ class OneClassical:
 		links = soup.find("div", attrs={"id":"tempo"}).findAll("a")
 		mp3=[]
 		for link in links:
-			mp3.append([link.find(text=True), link.get("href")])
+			nome = link.find(text=True)
+			href = link.get("href")
+			if not self.is_in_list(list=mp3, link=href):
+				mp3.append([nome, href])
 		
 		return mp3
+	
+	
