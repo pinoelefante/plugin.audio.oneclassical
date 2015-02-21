@@ -29,6 +29,10 @@ def addDir (s,p):
     item = xbmcgui.ListItem(s)
     return xbmcplugin.addDirectoryItem(handle=handle, url=parameters(p), listitem=item, isFolder=True)
 
+def addItem (s,p):
+    item = xbmcgui.ListItem(label=s)
+    return xbmcplugin.addDirectoryItem(handle=handle, url=parameters(p), listitem=item, isFolder=False)
+
 def list_composers():
     list = provider.get_composer_list()
     i = 0
@@ -40,6 +44,12 @@ def list_composers():
 def load_page(url):
     if provider.url_is_opera(url):
         print "pagina con mp3"
+        list = provider.get_music_list(path=url)
+        i = 0
+        while i<len(list):
+            addItem(list[i][0], list[i][1])
+            i = i + 1
+        xbmcplugin.endOfDirectory(handle=handle, succeeded=True)
     else:
         list = provider.get_page_list(path=url)
         i = 0
@@ -47,16 +57,20 @@ def load_page(url):
             addDir(list[i][0], list[i][1])
             i = i + 1
         xbmcplugin.endOfDirectory(handle=handle, succeeded=True)
+        
+def playMp3(url):
+    print "play mp3 = "+url
+    xbmc.Player().play(item=url.replace(" ", "%20"))
 
 params = parameters_string_to_dict(sys.argv[2])
 _dir = sys.argv[2]
-#xbmc.log("_dir = "+_dir, level=xbmc.LOGNOTICE)
-#xbmc.log(sys.argv[0]+sys.argv[2], level=xbmc.LOGNOTICE)
-
     
 if len(_dir)==0:
     list_composers()
 else:
     _dir = params.get("param")
     xbmc.log("_dir = "+_dir, level=xbmc.LOGNOTICE)
-    load_page(_dir)
+    if _dir.find("http")>=0:
+        playMp3(_dir)
+    else:
+        load_page(_dir)
