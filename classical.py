@@ -52,22 +52,10 @@ class OneClassical:
 		html = response.read()
 		response.close()
 		soup = BeautifulSoup(html);
-		#print soup.prettify()
 		
 		links = soup.find("div", attrs={"id":"tempo"}).findAll("a")
 		mp3=[]
 		for link in links:
 			mp3.append([link.find(text=True), link.get("href")])
-			#print link.find(text=True) + " --- " + link.get("href")
 		
 		return mp3
-		
-		#lista_mp3=[]
-		#if div.get("id") == "tempo":
-		#	lista_mp3 = div.findAll('a')
-			
-		#list=[]
-		#for link in lista_mp3:
-		#	list.append([link.find(text=True), link.get("href")])
-		#return list
-	

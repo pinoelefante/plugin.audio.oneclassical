@@ -43,7 +43,6 @@ def list_composers():
 
 def load_page(url):
     if provider.url_is_opera(url):
-        print "pagina con mp3"
         list = provider.get_music_list(path=url)
         i = 0
         while i<len(list):
@@ -59,7 +58,6 @@ def load_page(url):
         xbmcplugin.endOfDirectory(handle=handle, succeeded=True)
         
 def playMp3(url):
-    print "play mp3 = "+url
     xbmc.Player().play(item=url.replace(" ", "%20"))
 
 params = parameters_string_to_dict(sys.argv[2])
@@ -69,7 +67,6 @@ if len(_dir)==0:
     list_composers()
 else:
     _dir = params.get("param")
-    xbmc.log("_dir = "+_dir, level=xbmc.LOGNOTICE)
     if _dir.find("http")>=0:
         playMp3(_dir)
     else:
